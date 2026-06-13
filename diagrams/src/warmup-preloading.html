@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#ffffff;font-family:'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif;padding:30px 34px}
+  #diagram{width:1180px}
+  .center{text-align:center}
+  .ptitle{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:19px;padding:9px 20px;border-radius:999px;margin:4px 0 16px}
+  .ptitle.warm{background:#f3e8ff;color:#7c3aed}
+  .ptitle.bench{background:#dbeafe;color:#1d4ed8}
+  .ptitle small{font-weight:600;font-size:13px;opacity:.85}
+  .warmbox{border:2px dashed #a78bdf;border-radius:20px;padding:24px 16px;background:#faf8ff}
+  .row{display:flex;align-items:flex-start;justify-content:center}
+  .card{width:178px;background:#fff;border:1.6px solid #e5e7eb;border-radius:16px;padding:16px 12px 15px;text-align:center;box-shadow:0 3px 8px rgba(17,24,39,.07);position:relative}
+  .ic{width:56px;height:56px;margin:2px auto 11px;position:relative}
+  .ic>img{width:56px;height:56px;display:block}
+  .badge{position:absolute;right:-7px;bottom:-5px;width:23px;height:23px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2.5px solid #fff;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+  .badge>img{width:13px;height:13px;display:block}
+  .card h4{font-size:15px;font-weight:800;color:#1f2937;margin-bottom:6px}
+  .card p{font-size:11.5px;color:#6b7280;line-height:1.5}
+  .arrow{width:48px;align-self:center;margin-top:28px;display:flex;justify-content:center}
+  .arrow>img{width:30px;height:30px}
+  .c-indigo{border-color:#c7d2fe}.c-indigo h4{color:#4338ca}
+  .c-blue{border-color:#bfdbfe}.c-blue h4{color:#1d4ed8}
+  .c-green{border-color:#bbf7d0}.c-green h4{color:#15803d}
+  .c-orange{border-color:#fde68a}.c-orange h4{color:#b45309}
+  .c-purple{border-color:#ddd6fe}.c-purple h4{color:#6d28d9}
+  .c-red{border-color:#fecaca}.c-red h4{color:#b91c1c}
+  .c-amber{border-color:#fed7aa}.c-amber h4{color:#c2410c}
+  .gobar{display:flex;flex-direction:column;align-items:center;margin:16px 0}
+  .gobar>img{width:26px;height:26px;opacity:.55}
+  .go{display:inline-flex;align-items:center;gap:10px;background:#5B3FA0;color:#fff;font-weight:800;font-size:15px;padding:12px 26px;border-radius:14px;box-shadow:0 4px 10px rgba(91,63,160,.35);margin:4px 0}
+  .go>img{width:22px;height:22px}
+  .legend{display:flex;gap:34px;justify-content:center;align-items:center;margin-top:24px;padding-top:16px;border-top:1px solid #eee;font-size:13px;color:#4b5563}
+  .legend b{color:#374151}
+  .lg{display:flex;align-items:center;gap:9px}
+  .ln{width:36px;border-top:3px dashed #8b5cf6}
+  .ln.solid{border-top:3px solid #2563eb}
+  .chk{width:20px;height:20px;background:#22c55e;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
+  .chk>img{width:12px;height:12px}
+</style>
+</head>
+<body>
+<div id="diagram">
+  <div class="center"><span class="ptitle warm">🔥 Warm-up Phase <small>(초기 연결 · 풀 적재 · 측정 타이머 밖)</small></span></div>
+  <div class="warmbox"><div class="row">
+    <div class="card c-indigo">
+      <div class="ic"><img src="https://api.iconify.design/lucide:git-fork.svg?color=%234338ca"><span class="badge"><img src="https://api.iconify.design/lucide:check.svg?color=%23ffffff"></span></div>
+      <h4>프로세스 fork</h4><p>소비자 프로세스<br>미리 띄움</p>
+    </div>
+    <div class="arrow"><img src="https://api.iconify.design/lucide:arrow-right.svg?color=%23475569"></div>
+    <div class="card c-blue">
+      <div class="ic"><img src="https://api.iconify.design/lucide:globe.svg?color=%232563eb"><span class="badge"><img src="https://api.iconify.design/lucide:check.svg?color=%23ffffff"></span></div>
+      <h4>DNS 조회</h4><p>도메인 → IP</p>
+    </div>
+    <div class="arrow"><img src="https://api.iconify.design/lucide:arrow-right.svg?color=%23475569"></div>
+    <div class="card c-green">
+      <div class="ic"><img src="https://api.iconify.design/lucide:server.svg?color=%23334155"><span class="badge"><img src="https://api.iconify.design/lucide:check.svg?color=%23ffffff"></span></div>
+      <h4>TCP 연결</h4><p>3-way handshake</p>
+    </div>
+    <div class="arrow"><img src="https://api.iconify.design/lucide:arrow-right.svg?color=%23475569"></div>
+    <div class="card c-orange">
+      <div class="ic"><img src="https://api.iconify.design/mdi:shield-lock.svg?color=%23f59e0b"><span class="badge"><img src="https://api.iconify.design/lucide:check.svg?color=%23ffffff"></span></div>
+      <h4>TLS 핸드셰이크</h4><p>HTTPS 보안 채널</p>
+    </div>
+    <div class="arrow"><img src="https://api.iconify.design/lucide:arrow-right.svg?color=%23475569"></div>
+    <div class="card c-purple">
+      <div class="ic"><img src="https://api.iconify.design/mdi:database.svg?color=%237c3aed"><span class="badge"><img src="https://api.iconify.design/lucide:check.svg?color=%23ffffff"></span></div>
+      <h4>커넥션 풀</h4><p>httpx.Client<br>Keep-Alive</p>
+    </div>
+  </div></div>
+
+  <div class="gobar">
+    <img src="https://api.iconify.design/lucide:chevron-down.svg?color=%235B3FA0">
+    <span class="go"><img src="https://api.iconify.design/mdi:play.svg?color=%23ffffff"> Enter (GO 신호) — t0 타이머 시작</span>
+    <img src="https://api.iconify.design/lucide:chevron-down.svg?color=%235B3FA0">
+  </div>
+
+  <div class="center"><span class="ptitle bench">Benchmark Phase <small>(측정 구간 · 순수 처리 시간만)</small></span></div>
+  <div class="row">
+    <div class="card c-indigo">
+      <div class="ic"><img src="https://api.iconify.design/mdi:counter.svg?color=%234f46e5"></div>
+      <h4>Producer</h4><p>상품코드 +1<br>순차 생성</p>
+    </div>
+    <div class="arrow"><img src="https://api.iconify.design/lucide:arrow-right.svg?color=%237c3aed"></div>
+    <div class="card c-red">
+      <div class="ic"><img src="https://api.iconify.design/logos:redis.svg"></div>
+      <h4>Redis Queue</h4><p>작업 큐 적재</p>
+    </div>
+    <div class="arrow"><img src="https://api.iconify.design/lucide:arrow-right.svg?color=%2316a34a"></div>
+    <div class="card c-amber">
+      <div class="ic"><img src="https://api.iconify.design/mdi:cogs.svg?color=%23ea580c"></div>
+      <h4>Consumer</h4><p>P × C 코루틴<br>(병렬 다운로드)</p>
+    </div>
+    <div class="arrow"><img src="https://api.iconify.design/lucide:arrow-right.svg?color=%23ea580c"></div>
+    <div class="card c-blue">
+      <div class="ic"><img src="https://api.iconify.design/mdi:folder-image.svg?color=%232563eb"></div>
+      <h4>이미지 저장</h4><p>~/images (디스크)</p>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="lg"><span class="ln"></span><span><b>Warm-up</b> · 초기 연결·풀 적재</span></span>
+    <span class="lg"><span class="ln solid"></span><span><b>Benchmark</b> · 실제 측정 구간</span></span>
+    <span class="lg"><span class="chk"><img src="https://api.iconify.design/lucide:check.svg?color=%23ffffff"></span><span><b>Pool Reuse</b> · 이후 요청은 풀 재사용</span></span>
+  </div>
+</div>
+</body>
+</html>

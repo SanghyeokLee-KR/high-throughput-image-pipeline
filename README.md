@@ -141,7 +141,7 @@ async 단독 실행 (헤드라인):
 2. **httpx.Client 생성** — 소비자 내부 객체·커넥션 풀 준비
 3. **robots.txt 요청** — DNS·TCP·TLS·HTTP 실제 네트워크 예열
 
-모든 소비자가 READY가 되면 `Enter`(GO 신호)를 누르는 순간 `t0` 타이머가 시작되고, 이후 **순수 처리 시간만** 측정됩니다. (draw.io 원본: [`diagrams/src/warmup-preloading.drawio`](diagrams/src/warmup-preloading.drawio))
+모든 소비자가 READY가 되면 `Enter`(GO 신호)를 누르는 순간 `t0` 타이머가 시작되고, 이후 **순수 처리 시간만** 측정됩니다. (다이어그램 원본: [`diagrams/src/warmup-preloading.html`](diagrams/src/warmup-preloading.html))
 
 ## 7. 확장성 · 유지보수
 
@@ -180,7 +180,7 @@ high-throughput-image-pipeline/
 ├── main_mp.py         #   멀티프로세스 전용 버전 (비교용)
 ├── requirements.txt   # httpx[http2] · redis · psutil
 ├── docs/              # 아키텍처 다이어그램(미션 브리프) · 실행/벤치 스크린샷
-├── diagrams/          # 예열 흐름도 — draw.io 원본(src/) + PNG(png/)
+├── diagrams/          # 예열 흐름도 — HTML 원본(src/) + PNG(png/)
 └── README.md
 ```
 
