@@ -1,0 +1,18 @@
+# 키·시크릿 — 절대 커밋 금지
+*.pem
+*.ppk
+*.key
+.env
+.env.*
+
+# 다운로드 산출물
+images/
+data/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
