@@ -1,9 +1,9 @@
-"""상품 이미지 수집 파이프라인 — 멀티프로세스 (스레드·코루틴 미사용).
+"""상품 이미지 수집 파이프라인: 멀티프로세스 (스레드·코루틴 미사용).
 
 Producer 1개가 상품코드를 +1씩 만들어 Redis 큐에 넣고,
 Consumer N개가 큐에서 꺼내 페이지를 받아 이미지를 다운로드한다.
 동시성은 '프로세스 수'로만 낸다(각 프로세스는 동기 1요청).
-수집 대상은 환경변수(TARGET_HOST)로 분리 — 특정 사이트에 묶이지 않게.
+수집 대상은 환경변수(TARGET_HOST)로 분리: 특정 사이트에 묶이지 않게.
 
 사용법: python3 main.py [START_CODE] [TARGET]
         env: TARGET_HOST(필수), PROCESSES=32, HTTP2=0
@@ -45,7 +45,7 @@ HEADERS = {
 IMAGE_FIELD_BYTES = b'"' + IMAGE_FIELD.encode() + b'"'         # 빠른 substring 선거름용
 IMAGE_URL_RE = re.compile(b'"' + IMAGE_FIELD.encode() + rb'":"([^"]+)"')
 
-# Redis 키 — 프로세스 간 공유 상태(생산자·소비자는 오직 Redis로만 통신).
+# Redis 키: 프로세스 간 공유 상태(생산자·소비자는 오직 Redis로만 통신).
 K_QUEUE    = "crawl:q"
 K_SAVED    = "crawl:saved"     # 저장 성공 카운터(원자 INCR)
 K_STOP     = "crawl:stop"
@@ -321,7 +321,7 @@ def main() -> None:
     consumers = start_consumers(target)            # 측정 전: 프로세스 spawn + 예열
     print(f"   {C_DIM}🔥 소비자 {PROCESSES}개 예열 중...{C_RESET}", end="", flush=True)
     wait_until_ready(r)
-    print(f"\r   {C_PURPLE}🔥 예열 완료 — 풀스피드 대기 중{C_RESET}            ")
+    print(f"\r   {C_PURPLE}🔥 예열 완료 · 풀스피드 대기 중{C_RESET}            ")
     input(f"\n   {C_BOLD}▶  시작하려면 Enter 를 누르세요...{C_RESET}")
 
     t0 = time.time()                               # ← 타이머 시작(예열은 이미 끝남)

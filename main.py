@@ -1,4 +1,4 @@
-"""상품 이미지 수집 파이프라인 — async(httpx · HTTP/2) · 멀티프로세스 · 스레드 미사용.
+"""상품 이미지 수집 파이프라인: async(httpx · HTTP/2) · 멀티프로세스 · 스레드 미사용.
    시작코드부터 +1 순차 증가, 유효 상품 TARGET개의 메인 상품 이미지(mainImageUrl) 다운로드.
    Producer 1 프로세스(Redis rpush만) + Consumer P 프로세스(각자 asyncio 루프, 코루틴 C개).
    생산자-소비자는 오직 Redis 큐로만 통신. 저장 카운터는 Redis INCR(원자)로 정확히 TARGET개 보장.
@@ -25,9 +25,9 @@ FETCHED   = "crawl:fetched"  # 처리한 총 페이지 수(처리율·유효율 
 PRODUCED  = "crawl:produced" # 생산자가 큐에 넣은 코드 수(진행 표시용)
 GO        = "crawl:go"       # 예열 후 '시작' 신호(이 신호 전까지 소비자 대기)
 READY     = "crawl:ready"    # 예열을 끝낸 소비자 수
-MAX_QUEUE = 400              # 큐 backpressure — 이만큼 차면 producer가 잠깐 쉼(메모리 보호)
+MAX_QUEUE = 400              # 큐 backpressure: 이만큼 차면 producer가 잠깐 쉼(메모리 보호)
 TIMEOUT   = 5
-HTTP2     = os.getenv("HTTP2", "1") == "1"   # HTTP/2 멀티플렉싱(t3.micro 실측: 켜는 게 빠름 — 핸드셰이크 절약)
+HTTP2     = os.getenv("HTTP2", "1") == "1"   # HTTP/2 멀티플렉싱(t3.micro 실측: 켜는 게 빠름, 핸드셰이크 절약)
 
 # 수집 대상은 코드에 박지 않고 환경변수로 분리(대상이 바뀌어도 호스트만 바꾸면 재사용 가능).
 TARGET_HOST = os.getenv("TARGET_HOST", "www.example.com")      # 수집 대상 호스트
@@ -36,7 +36,7 @@ IMAGE_FIELD = os.getenv("TARGET_IMAGE_FIELD", "mainImageUrl")  # 본문에서 �
 PAGE_URL    = f"https://{TARGET_HOST}{PAGE_PATH}"
 WARMUP_URL  = f"https://{TARGET_HOST}/robots.txt"              # 측정 전 TLS 커넥션 예열용
 
-# 터미널 색(퍼플) — 진행 표시 꾸밈용. 색 미지원 터미널이면 코드만 보일 뿐 동작엔 무관.
+# 터미널 색(퍼플): 진행 표시 꾸밈용. 색 미지원 터미널이면 코드만 보일 뿐 동작엔 무관.
 C_PURPLE = "\033[38;5;135m"
 C_GRAY   = "\033[38;5;240m"
 C_BOLD   = "\033[1m"
@@ -118,7 +118,7 @@ async def worker(client, r, mq, target):
                 await r.incr(RL)                 # 429/403/5xx = 차단·오류 → 가시화
                 continue
             body = page.content                  # 이미지 URL은 HTML 끝부분(~120KB 지점) → 전체 본문에서 찾는다
-            if IMAGE_FIELD_BYTES not in body:    # 빠른 substring 선거름 — 무효(빈 껍데기) 즉시 스킵
+            if IMAGE_FIELD_BYTES not in body:    # 빠른 substring 선거름: 무효(빈 껍데기) 즉시 스킵
                 continue
             m = MAIN.search(body)                # mainImageUrl 있는 유효 상품만 정규식
             if not m:
@@ -199,21 +199,21 @@ if __name__ == "__main__":
           f"→ 유효 상품 {C_PURPLE}{C_BOLD}{TARGET}{C_RESET}개")
     print(f"   {C_DIM}🏭 생산자 1  ─▶  📦 Redis 큐  ─▶  🔍 소비자 {PROCESSES}프로세스 × {CONCURRENCY}코루틴{C_RESET}\n")
 
-    # 소비자를 미리 띄워 예열(프로세스·이벤트루프·TLS 커넥션) — 측정 타이머 밖
+    # 소비자를 미리 띄워 예열(프로세스·이벤트루프·TLS 커넥션): 측정 타이머 밖
     cons = [Process(target=consumer, args=(TARGET, CONCURRENCY)) for _ in range(PROCESSES)]
     for c in cons:
         c.start()
     print(f"   {C_DIM}🔥 소비자 예열 중...{C_RESET}", end="", flush=True)
     while int(r.get(READY) or 0) < PROCESSES:
         time.sleep(0.05)
-    print(f"\r   {C_PURPLE}🔥 예열 완료 — 풀스피드 대기 중{C_RESET}        ")
+    print(f"\r   {C_PURPLE}🔥 예열 완료 · 풀스피드 대기 중{C_RESET}        ")
     input(f"\n   {C_BOLD}▶  시작하려면 Enter 를 누르세요...{C_RESET}")
 
     t0 = time.time()                            # ← 타이머 시작(예열은 측정 밖)
     r.set(GO, 1)                                 # 소비자 출발!
     prod = Process(target=producer, args=(START_CODE,))
     prod.start()
-    # 종료는 '실제 저장된 파일 수'로 판정 — 카운터(INCR) 기준이면 슬롯 예약 직후·
+    # 종료는 '실제 저장된 파일 수'로 판정: 카운터(INCR) 기준이면 슬롯 예약 직후·
     # write 직전에 terminate되어 마지막 1장이 잘리는 경합이 생긴다(파일 199/99 버그).
     psutil.cpu_percent()                        # 워밍업(첫 호출은 0 반환)
     nc0 = psutil.net_io_counters()
@@ -277,4 +277,4 @@ if __name__ == "__main__":
     print(f"   🧠 RAM      평균 {avg_ram:>4.0f}%   최대 {max_ram:>4.0f}%    (총 {ram_total_mb:.0f} MB)")
     print(f"   🌐 네트워크   총 {net_total_mb:>6.1f} MB   최대 {max_net:>4.1f} MB/s")
     print(f"{C_PURPLE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{C_RESET}", flush=True)
-    os._exit(0)                                 # multiprocessing 정리 행 방지 — 강제 종료
+    os._exit(0)                                 # multiprocessing 정리 행 방지: 강제 종료
